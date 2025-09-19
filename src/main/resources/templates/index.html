@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StdPortal - Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>Welcome to StdPortal</h1>
+<p>Đây là trang chính của hệ thống quản lý sinh viên.</p>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/student}">Quản lý sinh viên</a></li>
+    </ul>
+</nav>
+
+<footer>
+    <p>© 2025 StdPortal</p>
+</footer>
+
+<!-- Có thể tái sử dụng JS (nếu cần cho navigation hoặc alert) -->
+<script th:src="@{/js/student.js}"></script>
+</body>
+</html>
