@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${mode=='create' ? 'Thêm sinh viên' : 'Sửa sinh viên'}">Form</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1 th:text="${mode=='create' ? 'Thêm sinh viên' : 'Sửa sinh viên'}"></h1>
+
+<!-- ===== FORM CREATE ===== -->
+<form th:if="${mode=='create'}"
+      th:action="@{/students}" th:object="${dto}" method="post">
+
+    <div>
+        <label>Họ tên</label>
+        <input th:field="*{name}" required>
+        <span style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+
+<!--    <div>-->
+<!--        <label>Email</label>-->
+<!--        <input th:field="*{email}" type="email" required>-->
+<!--        <span style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
+<!--    </div>-->
+
+    <div>
+        <label>Ngày sinh</label>
+        <input th:field="*{dob}" type="date">
+        <span style="color:red" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></span>
+    </div>
+
+<!--    <div>-->
+<!--        <label>Ngành</label>-->
+<!--        <input th:field="*{major}">-->
+<!--    </div>-->
+
+    <div>
+        <label>GPA</label>
+        <input th:field="*{gpa}" type="number" step="0.01" min="0" max="4">
+        <span style="color:red" th:if="${#fields.hasErrors('gpa')}" th:errors="*{gpa}"></span>
+    </div>
+
+    <button type="submit">Tạo</button>
+    <a th:href="@{/students}">Huỷ</a>
+</form>
+
+<!-- ===== FORM EDIT ===== -->
+<form th:if="${mode=='edit'}"
+      th:action="@{|/students/${id}|}" th:object="${dto}" method="post">
+
+    <div>
+        <label>Họ tên</label>
+        <input th:field="*{name}" required>
+        <span style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+
+<!--    <div>-->
+<!--        <label>Email</label>-->
+<!--        <input th:field="*{email}" type="email" required>-->
+<!--        <span style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
+<!--    </div>-->
+
+    <div>
+        <label>Ngày sinh</label>
+        <input th:field="*{dob}" type="date">
+        <span style="color:red" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></span>
+    </div>
+
+<!--    <div>-->
+<!--        <label>Ngành</label>-->
+<!--        <input th:field="*{major}">-->
+<!--    </div>-->
+
+    <div>
+        <label>GPA</label>
+        <input th:field="*{gpa}" type="number" step="0.01" min="0" max="4">
+        <span style="color:red" th:if="${#fields.hasErrors('gpa')}" th:errors="*{gpa}"></span>
+    </div>
+
+    <button type="submit">Cập nhật</button>
+    <a th:href="@{/students}">Huỷ</a>
+</form>
+
+</body>
+</html>
