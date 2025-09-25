@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Table(name = "teacher")
 @Entity @Getter @Setter @NoArgsConstructor
 public class Teacher {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

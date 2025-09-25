@@ -5,13 +5,14 @@ import com.example.stdportal.Model.Student;
 import com.example.stdportal.Repository.StudentRepository;
 import com.example.stdportal.Service.StudentService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/students")
@@ -49,19 +50,71 @@ public class StudentController {
         model.addAttribute("page", pageData);
         model.addAttribute("q", q);
         model.addAttribute("sort", sort);
-        return "student";               // -> templates/student.html
+        return "Student/student-list";
     }
     @GetMapping("/{id}")
-    public Student get(@PathVariable Long id) { return studentService.get(id); }
-
-    @PostMapping
-    public Student create(@Valid @RequestBody StudentDTO dto) { return studentService.create(dto); }
-
-    @PutMapping("/{id}")
-    public Student update(@PathVariable Long id, @Valid @RequestBody StudentDTO dto) {
-        return studentService.update(id, dto);
+    public String view(@PathVariable Long id, Model model) {
+        Student s = studentService.get(id);
+        model.addAttribute("s", s);
+        return "Student/student-view"; // templates/student-view.html
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) { studentService.delete(id); }
+    // CREATE - form
+    @GetMapping("/new")
+    public String createForm(Model model) {
+        model.addAttribute("dto", new StudentDTO());
+        model.addAttribute("mode", "create");
+        return "Student/student-form"; // templates/student-form.html
+    }
+
+    // CREATE - submit
+    @PostMapping
+    public String create(@Valid @ModelAttribute("dto") StudentDTO dto,
+                         BindingResult binding,
+                         RedirectAttributes ra,
+                         Model model) {
+        if (binding.hasErrors()) {
+            model.addAttribute("mode", "create");
+            return "Student/student-form";
+        }
+        Student created = studentService.create(dto);
+        ra.addFlashAttribute("msg", "Tạo sinh viên thành công (ID: " + created.getId() + ")");
+        return "redirect:/students";
+    }
+
+    // UPDATE - form
+    @GetMapping("/{id}/edit")
+    public String editForm(@PathVariable Long id, Model model) {
+        Student s = studentService.get(id);
+        StudentDTO dto = new StudentDTO(s.getName(),s.getClassroom(),s.getDob(), s.getGpa());
+        model.addAttribute("dto", dto);
+        model.addAttribute("id", id);
+        model.addAttribute("mode", "edit");
+        return "Student/student-form";
+    }
+
+    // UPDATE - submit (dùng POST cho đơn giản)
+    @PostMapping("/{id}")
+    public String update(@PathVariable Long id,
+                         @Valid @ModelAttribute("dto") StudentDTO dto,
+                         BindingResult binding,
+                         RedirectAttributes ra,
+                         Model model) {
+        if (binding.hasErrors()) {
+            model.addAttribute("mode", "edit");
+            model.addAttribute("id", id);
+            return "Student/student-form";
+        }
+        studentService.update(id, dto);
+        ra.addFlashAttribute("msg", "Cập nhật sinh viên #" + id + " thành công");
+        return "redirect:/students";
+    }
+
+    // DELETE (dùng POST để submit từ form)
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes ra) {
+        studentService.delete(id);
+        ra.addFlashAttribute("msg", "Đã xoá sinh viên #" + id);
+        return "redirect:/students";
+    }
 }

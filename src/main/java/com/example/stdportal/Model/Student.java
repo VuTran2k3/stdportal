@@ -7,8 +7,12 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Locale;
+
+@Table(name = "student")
 @Entity
 @Getter @Setter @ToString @NoArgsConstructor
 public class Student {
@@ -16,12 +20,12 @@ public class Student {
     private long id;
     private String name;
     private String major;
-    private Date dob;
+    private LocalDate dob;
     private Double gpa;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "classroom_name")
-//    private Classroom classroom;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "classroom_name")
+    private Classroom classroom;
 
     private String meta;// = this.id + String.join("-",name.split(" "));
     @CreatedDate
