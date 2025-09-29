@@ -2,6 +2,7 @@ package com.example.stdportal.Service;
 
 import com.example.stdportal.DTO.StudentDTO;
 import com.example.stdportal.Model.Student;
+import com.example.stdportal.Repository.ClassroomRepository;
 import com.example.stdportal.Repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 public class StudentService{
 //    @Autowired
     private StudentRepository studentRepository;
+    private ClassroomRepository classroomRepository;
+
 
     public Page<Student> list(String keyword, Pageable pageable){
         if (keyword == null || keyword.isBlank()) return studentRepository.findAll(pageable);
@@ -24,11 +27,18 @@ public class StudentService{
     public Student create(StudentDTO dto){
 //        if (studentRepository.existsByEmail(dto.email()))
 //            throw new DataIntegrityViolationException("Email already exists");
-        return studentRepository.save(dto.toStudent());
+        var student = dto.toStudent();
+        var classroom = classroomRepository.findById(dto.getClassroom().getName())
+                .orElseThrow(() -> new EntityNotFoundException("Classroom not found"));
+        student.setClassroom(classroom);
+        return studentRepository.save(student);
     }
     public Student update(Long id, StudentDTO dto){
         var student = get(id);
         dto.updateToStudent(student);
+        var classroom = classroomRepository.findById(dto.getClassroom().getName())
+                .orElseThrow(() -> new EntityNotFoundException("Classroom not found"));
+        student.setClassroom(classroom);
         return studentRepository.save(student);
     }
     public void delete(Long id){

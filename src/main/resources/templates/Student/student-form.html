@@ -18,11 +18,16 @@
         <span style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
     </div>
 
-<!--    <div>-->
-<!--        <label>Email</label>-->
-<!--        <input th:field="*{email}" type="email" required>-->
-<!--        <span style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
-<!--    </div>-->
+    <div>
+        <label>Lớp</label>
+        <select th:field="*{classroom}" required>
+            <option th:each="c : ${classrooms}"
+                    th:value="${c.name}"
+                    th:text="${c.name}">
+            </option>
+        </select>
+        <span style="color:red" th:if="${#fields.hasErrors('classroom')}" th:errors="*{classroom}"></span>
+    </div>
 
     <div>
         <label>Ngày sinh</label>
@@ -37,7 +42,7 @@
 
     <div>
         <label>GPA</label>
-        <input th:field="*{gpa}" type="number" step="0.01" min="0" max="4">
+        <input th:field="*{gpa}" type="number" step="0.01" min="0" max="10">
         <span style="color:red" th:if="${#fields.hasErrors('gpa')}" th:errors="*{gpa}"></span>
     </div>
 
@@ -55,11 +60,16 @@
         <span style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
     </div>
 
-<!--    <div>-->
-<!--        <label>Email</label>-->
-<!--        <input th:field="*{email}" type="email" required>-->
-<!--        <span style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
-<!--    </div>-->
+    <div>
+        <label>Lớp</label>
+        <select th:field="*{classroom}" required>
+            <option th:each="c : ${classrooms}"
+                    th:value="${c.name}"
+                    th:text="${c.name}">
+            </option>
+        </select>
+        <span style="color:red" th:if="${#fields.hasErrors('classroom')}" th:errors="*{classroom}"></span>
+    </div>
 
     <div>
         <label>Ngày sinh</label>
@@ -74,7 +84,7 @@
 
     <div>
         <label>GPA</label>
-        <input th:field="*{gpa}" type="number" step="0.01" min="0" max="4">
+        <input th:field="*{gpa}" type="number" step="0.01" min="0" max="10">
         <span style="color:red" th:if="${#fields.hasErrors('gpa')}" th:errors="*{gpa}"></span>
     </div>
 
