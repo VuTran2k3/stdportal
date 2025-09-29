@@ -1,8 +1,9 @@
 package com.example.stdportal.Controller;
 
 import com.example.stdportal.DTO.StudentDTO;
+import com.example.stdportal.Model.Classroom;
 import com.example.stdportal.Model.Student;
-import com.example.stdportal.Repository.StudentRepository;
+import com.example.stdportal.Repository.ClassroomRepository;
 import com.example.stdportal.Service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
@@ -14,28 +15,25 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/students")
 public class StudentController {
-    StudentRepository studentRepository;
     private final StudentService studentService;
+    private final ClassroomRepository classroomRepository;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, ClassroomRepository classroomRepository) {
         this.studentService = studentService;
+        this.classroomRepository = classroomRepository;
+    }
+
+    @ModelAttribute("classrooms")
+    public List<Classroom> classrooms() {
+        return classroomRepository.findAll(Sort.by("name").ascending());
     }
 
     @GetMapping("")
-//    public Page<Student> studentList(
-//            @RequestParam(required = false) String q,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size,
-//            @RequestParam(defaultValue = "id,desc") String sort) {
-//
-//        String[] s = sort.split(",");
-//        Sort.Direction dir = (s.length > 1 && s[1].equalsIgnoreCase("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
-//        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, s[0]));
-//        return studentService.list(q, pageable);
-//    }
     public String list(@RequestParam(required = false) String q,
                        @RequestParam(defaultValue = "0") int page,
                        @RequestParam(defaultValue = "10") int size,
@@ -86,7 +84,9 @@ public class StudentController {
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
         Student s = studentService.get(id);
-        StudentDTO dto = new StudentDTO(s.getName(),s.getClassroom(),s.getDob(), s.getGpa());
+        StudentDTO dto = new StudentDTO(s.getName(),
+                s.getClassroom() != null ? s.getClassroom() : null,
+                s.getDob(), s.getGpa());
         model.addAttribute("dto", dto);
         model.addAttribute("id", id);
         model.addAttribute("mode", "edit");

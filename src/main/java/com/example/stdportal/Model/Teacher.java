@@ -17,15 +17,14 @@ import java.util.List;
 public class Teacher {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String firstname;
-    private String lastname;
+    private String name;
     private String role;
 
     @Email @Column(unique = true)
     private String email;
 
-//    @OneToMany(mappedBy = "homeroomTeacher", cascade = CascadeType.ALL)
-//    private List<Classroom> classrooms = new ArrayList<>();
+    @OneToMany(mappedBy = "homeroomTeacher", cascade = CascadeType.ALL)
+    private List<Classroom> classrooms = new ArrayList<>();
 
     @Column(unique = true)
     public String meta;

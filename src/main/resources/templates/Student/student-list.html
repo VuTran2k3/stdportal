@@ -23,14 +23,19 @@
 <table>
     <thead>
     <tr>
-        <th>ID</th><th>Họ tên</th><th>GPA</th><th>Hành động</th>
+        <th>ID</th>
+        <th>Họ tên</th>
+        <th>Lớp</th>
+<!--        <th>Ngành</th>-->
+        <th>GPA</th>
+        <th>Hành động</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="s : ${students}">
         <td th:text="${s.id}">1</td>
         <td th:text="${s.name}">Nguyen Van A</td>
-<!--        <td th:text="${s.email}">a@example.com</td>-->
+        <td th:text="${s.classroom.name}">10A10</td>
 <!--        <td th:text="${s.major}">CS</td>-->
         <td th:text="${s.gpa}">3.5</td>
         <td>
@@ -50,7 +55,6 @@
     </tbody>
 </table>
 
-<!-- Phân trang: dùng params trong @{...(...)} -->
 <div th:if="${page != null}">
     <a th:if="${!page.first}"
        th:href="@{/students(page=${page.number - 1}, size=${page.size}, q=${q}, sort=${sort})}">« Prev</a>
